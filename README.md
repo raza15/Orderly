@@ -1,24 +1,7 @@
-# README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Run the project: Go to the main directory. On the terminal, run: rails server
 
-Things you may want to cover:
+Then go to localhost:3000
 
-* Ruby version
+The files in which to add frontend: app/views/sessions/new.html.erb (this is the home page).
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
