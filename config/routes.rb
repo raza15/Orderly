@@ -8,5 +8,5 @@ Rails.application.routes.draw do
   get '/whichpayment', to: 'sessions#whichpayment'
   get '/creditpayment', to: 'sessions#creditpayment'
   get '/end_transaction', to: 'sessions#end_transaction'
-
+  get '/magic', to: 'sessions#magic'
 end
