@@ -130,6 +130,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
         total_cost = 0;
       }
       
+      if(serverResponse["result"]["action"]=="magic") {
+      } else if(serverResponse["result"]["action"]=="magic_pay.verification") {
+        window.location.href = "/magic";
+      }
       if(serverResponse["result"]["action"]=="coffee.add_flavor") {
         if(serverResponse["result"]["resolvedQuery"]=="yes") {
           document.getElementById("p1").innerHTML += "Extra Flavor"+" : $"+1.5+"<br>";

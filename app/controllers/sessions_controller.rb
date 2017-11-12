@@ -19,6 +19,10 @@ class SessionsController < ApplicationController
     cookies.delete :coffee_size
   end
 
+  def magic
+
+  end
+
   def end_transaction
     reset_session
     cookies.delete :orders
