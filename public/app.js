@@ -126,19 +126,47 @@ document.addEventListener("DOMContentLoaded", function(event) {
       var tax_rate = 0.10;
       var action = serverResponse["result"]["action"];
       var total_cost = parseInt(jQuery.cookie("total_cost"));
+      if(isNaN(total_cost)) {
+        total_cost = 0;
+      }
       
-      if( serverResponse["result"]["metadata"]["intentName"]=="order.coffee" ) {
-        if(serverResponse["result"]["fulfillment"]["speech"]=="Ok, what size?") {
-          if(isNaN(serverResponse["result"]["parameters"]["number"])==false) {
-            var num = parseInt(isNaN(serverResponse["result"]["parameters"]["number"]));
-            $.cookie("total_cost", num);
-          }
+      if(serverResponse["result"]["action"]=="coffee.add_flavor") {
+        if(serverResponse["result"]["resolvedQuery"]=="yes") {
+          document.getElementById("p1").innerHTML += "Extra Flavor"+" : $"+1.5+"<br>";
+          total_cost = total_cost + 1.5;
+          document.getElementById("p2").innerHTML = " TOTAL COST: $"+total_cost+"<br>";
         }
-
-
+      } else if(serverResponse["result"]["action"]=="ordercoffee.add_sugar") {
+        if(serverResponse["result"]["resolvedQuery"]=="yes") {
+          document.getElementById("p1").innerHTML += "Sugar"+" : $"+0.5+"<br>";
+          total_cost = total_cost + 0.5;
+          document.getElementById("p2").innerHTML = " TOTAL COST: $"+total_cost+"<br>";
+          document.getElementById("img1").src="/images/coffee_flavors.jpg";
+        }
+      } else if( serverResponse["result"]["action"]=="coffee.add_item" ) {
+        var size = serverResponse["result"]["parameters"]["size"];
+        if(size!="") {
+          var amount = serverResponse["result"]["parameters"]["number"];
+          if(isNaN(amount)==true) {
+            amount = 1;
+          }
+          var cost = 2;
+          if(size=="medium") {
+            cost = 4;
+          }else if(size=="large") {
+            cost = 5;
+          }
+          total_cost = total_cost + cost;
+          document.getElementById("p1").innerHTML += amount+" "+size+" "+"Coffee"+" : $"+cost+"<br>";
+          document.getElementById("p2").innerHTML = " TOTAL COST: $"+total_cost+"<br>";
+          document.getElementById("img1").src="/images/sugar.jpeg";
+          // document.getElementById("img1").src="/images/hot-drinks.jpg";
+        }
+      } else if(action=="orderdonut.show_types") {
+        document.getElementById("img1").src="/images/dunkin-donut.jpg";
       } else if(action == "add_item") {
-        var donut_types = serverResponse["result"]["parameters"]["donutType"]
-        var donut_numbers = serverResponse["result"]["parameters"]["number"]
+        var donut_types = serverResponse["result"]["parameters"]["donutType"];
+        var donut_numbers = serverResponse["result"]["parameters"]["number"];
         if(donut_types.length!=0) {
           for(i=0; i<donut_types.length; i++) {
             var donut_type = donut_types[i];
@@ -155,18 +183,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
               }
               console.log(total_cost);
               total_cost = total_cost + cost;
-              document.getElementById("p1").innerHTML += donut_count+" "+donut_type+" : $"+cost+"<br>"
+              document.getElementById("p1").innerHTML += donut_count+" "+donut_type+" : $"+cost+"<br>";
               document.getElementById("p2").innerHTML = " TOTAL COST: $"+total_cost+"<br>";
             }
           }
+          
           $.cookie("orders", orders_array);
-          $.cookie("total_cost", total_cost);
         }
       } else if(action=="confirm_order") {
-        var msg1 = new SpeechSynthesisUtterance("Perfect. Your total will be "+total_cost+" dollars. You are now redirected to the payments page.");
+        var msg1 = new SpeechSynthesisUtterance("Perfect. You are now redirected to the payments page.");
         window.speechSynthesis.speak(msg1);
         window.location.href = "/creditpayment";
       }
+      $.cookie("total_cost", total_cost);
       // if( speech.startsWith("Showing you different types of donuts") ) {
       //   document.getElementById("img1").src="/images/dunkin-donut.jpg";
       // } else if( speech.startsWith("Showing you different types of hot drinks") ) {

@@ -13,11 +13,26 @@ class SessionsController < ApplicationController
   end
 
   def creditpayment
-
+    cookies.delete :orders
+    cookies.delete :coffee_order
+    cookies.delete :coffee_quantity
+    cookies.delete :coffee_size
   end
 
   def end_transaction
+    reset_session
+    cookies.delete :orders
+    cookies.delete :coffee_order
+    cookies.delete :coffee_quantity
+    cookies.delete :coffee_size
+    cookies.delete :total_cost
 
+    cookies[:orders] = []
+    cookies[:coffee_order] = "coffee"
+    cookies[:coffee_quantity] = 1
+    cookies[:coffee_size] = "medium"
+    # cookies[:total_cost] = 0
+    session[:order_id] = 5
   end
 
   def creditpayment_process
@@ -70,6 +85,13 @@ class SessionsController < ApplicationController
 
   # GET /sessions/new
   def new
+    reset_session
+    cookies.delete :orders
+    cookies.delete :coffee_order
+    cookies.delete :coffee_quantity
+    cookies.delete :coffee_size
+    cookies.delete :total_cost
+
     cookies[:orders] = []
     cookies[:coffee_order] = "coffee"
     cookies[:coffee_quantity] = 1
